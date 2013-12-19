@@ -91,6 +91,10 @@ public class Output {
                         mc[5].noteOn(69, 600);
                         bassStart = System.currentTimeMillis();
                         break;
+                    case 6:
+                        mc[5].noteOn(60, 600);
+                        bassStart = System.currentTimeMillis();
+                        break;
                 } // switch
             } // if
         } // while

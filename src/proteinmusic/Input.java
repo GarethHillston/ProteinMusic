@@ -7,12 +7,16 @@ import java.io.*;
 public class Input {
 
     private String file;
-    private ArrayList nuc;
+    private ArrayList<Character> nuc;
     private ArrayList<AminoAcid> bass;
     private BufferedReader reader;
     private int ch;
+    private char[] nucs;
+    private Mapping mapping;
 
     public Input(String fileName) {
+        mapping = new Mapping();
+        nucs = new char[3];
         file = fileName;
         nuc = new ArrayList();
         bass = new ArrayList<AminoAcid>();
@@ -28,11 +32,13 @@ public class Input {
             while ((ch = reader.read()) != -1) {
                 char c = (char) ch;
                 nuc.add(c);
+                
+                nucs[i-1] = c;
 
                 if (i >= 2) {
                     int s = nuc.size();
-                    bass.add(new AminoAcid((Character) nuc.get(s - 1),
-                            (Character) nuc.get(s - 2), (Character) nuc.get(s - 3)));
+                    bass.add(new AminoAcid((Character)nucs[0],
+                            (Character)nucs[1], (Character)nucs[2], mapping));
                     i = 0;
                 } else {
                     i++;

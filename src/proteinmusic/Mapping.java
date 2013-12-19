@@ -14,49 +14,60 @@ import java.util.ArrayList;
  */
 public class Mapping {
     
-    // First value at each index is the polarity, second is the class
-    private int[][] mappings;
     // Containing all nucelotide sequences denoting the amino acid of that index
-    private char[][][] nucSeqs;
+    private ArrayList<Codon> nucSeqs;
+    // Mapping of codons to amino acids
+    private int[] map;
+    // First value at each index is the polarity, second is the class
+    private int[][] values;
     // Amino acid names
     private String[] names;
     
     public Mapping() {
-        mappings = new int[][]{{0,3},{0,0},{0,0},{0,1},{0,0},
-            {1,1},{0,2},{1,1},{0,0}, 
-            {1,3},{4,6},{4,6},{2,4},{1,5},{1,5},{2,4},{4,5},{4,5},
-            {1,1},{4,6},{0,3},{2,4},{1,1},{2,4},{0,0}};
         
-        nucSeqs = new char[][][]{
-            {{'t','t','t'},{'t','t','c'}}, //Phe
-            {{'t','t','a'},{'t','t','g'},{'c','t','t'},{'c','t','c'},
-                {'c','t','a'},{'c','t','g'}}, // Leu
-            {{'a','t','t'},{'a','t','c'},{'a','t','a'}}, // Ile
-            {{'a','t','g'}}, // Met
-            {{'g','t','t'},{'g','t','c'},{'g','t','a'},{'g','t','g'}}, // Val
-            {{'t','c','t'},{'t','c','c'},{'t','c','a'},{'t','c','g'}, 
-                {'a','g','t'},{'a','g','c'}}, // Ser
-            {{'c','c','t'},{'c','c','c'},{'c','c','a'},{'c','c','g'}}, // Pro
-            {{'a','c','t'},{'a','c','c'},{'a','c','a'},{'a','c','g'}}, // Thr
-            {{'g','c','t'},{'g','c','d'},{'g','c','a'},{'g','c','g'}}, // Ala
-            {{'t','a','t'},{'t','a','c'}}, // Tyr
-            {{'c','a','t'},{'c','a','c'}}, // His
-            {{'c','a','a'},{'c','a','g'}}, // Gln
-            {{'a','a','t'},{'a','a','c'}}, // Asn
-            {{'a','a','a'},{'a','a','g'}}, // Lys
-            {{'g','a','t'},{'g','a','c'}}, // Asp
-            {{'g','a','a'},{'g','a','g'}}, // Glu
-            {{'t','g','t'},{'t','g','c'}}, // Cys
-            {{'t','g','g'}}, //Trp
-            {{'c','g','t'},{'c','g','c'},{'c','g','a'},{'c','g','g'},
-                {'a','g','a'},{'a','g','g'}}, // Arg
-            {{'g','g','t'},{'g','g','c'},{'g','g','a'},{'g''g','g'}} // Gly
-        };
-            
-        names = new String[]{"Phenylalanine","Leucine","Isoleucine",
-            "Methionine","Valine","Serine","Proline","Threonine","Alanine",
-            "Tyrosine","Histidine","Glutamine","Asparagine","Lysine",
-            "Aspartate","Gulatmate","Cysteine","Tryptophan","Arginine",
-            "Glycine","ochre","amber","opal"};
+        nucSeqs = new ArrayList<Codon>();
+        
+        char[] nucs = {'a','c','g','t'};
+        
+        for (int i = 0; i < 4; i ++) {
+            for (int j = 0; j < 4; j ++) {
+                for ( int k = 0; k < 4; k ++) {
+                    nucSeqs.add(new Codon(nucs[i],nucs[j],nucs[k]));
+                }
+            }
+        }
+        
+        map = new int[] {0,1,0,1, 2,2,2,2, 3,4,3,4, 5,5,6,5, 7,8,7,8, 9,9,9,9,
+                            3,3,3,3, 10,10,10,10, 11,12,11,12, 13,13,13,13,
+                            14,14,14,14, 15,15,15,15, 16,17,18,17, 4,4,4,4,
+                            19,20,21,20, 10,22,10,22};
+        
+        values = new int[][]{{2,4},{1,5},{1,1},{2,4},{1,1},{0,0},{0,1},{1,5},
+            {2,4},{0,2},{0,0},{3,5},{3,5},{0,0},{0,0},{0,0},{4,6},{1,3},{4,6},
+            {4,6},{1,1},{0,3},{0,3}};
+        
+        
+        names = new String[]{"Lysine","Asparagine","Threonine","Arginine",
+            "Serine","Isoleucine","Methionine","Glutamine","Histidine",
+            "Proline","Leucine","Glutamate","Aspartate","Alanine","Glycine",
+            "Valine","ochre","Tyrosine","amber","opal","Cysteine","Tryptophan",
+            "Phenylalanine"};
     } // Mapping
+    
+    public int getIndex(Codon c) {
+        return map[nucSeqs.indexOf(c)];
+    } // getIndex
+    
+    public String getName(int index) {
+        return names[index];
+    }
+    
+    public int getPolarity(int index) {
+        return values[index][0];
+    }
+    
+    public int getAAClass(int index) {
+        return values[index][1];
+    }
+
 } // Class - Mapping
