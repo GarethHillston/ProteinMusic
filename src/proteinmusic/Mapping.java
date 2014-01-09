@@ -27,7 +27,7 @@ public class Mapping {
         
         nucSeqs = new ArrayList<Codon>();
         
-        char[] nucs = {'a','c','g','t'};
+        char[] nucs = {'A','C','G','T'};
         
         for (int i = 0; i < 4; i ++) {
             for (int j = 0; j < 4; j ++) {
@@ -47,7 +47,7 @@ public class Mapping {
             {4,6},{1,1},{0,3},{0,3}};
         
         
-        names = new String[]{"Lysine","Asparagine","Threonine","Arginine",
+        names = new String[]{"Lysine","Aspargine","Threonine","Arginine",
             "Serine","Isoleucine","Methionine","Glutamine","Histidine",
             "Proline","Leucine","Glutamate","Aspartate","Alanine","Glycine",
             "Valine","ochre","Tyrosine","amber","opal","Cysteine","Tryptophan",

@@ -16,17 +16,9 @@ public class AminoAcid {
     private int index, polarity, aaClass;
     private Codon codon;
     
-    public AminoAcid(String n, int i, int p, int cl, Codon c) {
-        name = n;
-        index = i;
-        polarity = p;
-        aaClass = cl;
-        codon = c;
-    }
-    
-    public AminoAcid(Character nuc1, Character nuc2, Character nuc3, Mapping m){
+    public AminoAcid(Codon codonIn, Mapping m){
         
-        codon = new Codon(nuc1, nuc2, nuc3);
+        codon = codonIn;
         index = m.getIndex(codon);
         name = m.getName(index);
         polarity = m.getPolarity(index);

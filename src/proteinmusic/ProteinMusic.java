@@ -15,14 +15,26 @@ public class ProteinMusic {
      */
     public static void main(String[] args) {
         // Create modules
-        Input input = new Input(args[0]);
-        Output output = new Output(input.getNuc(), input.getBass());
-        try {
-            output.play();
+        Input input = new Input(args[1]);
+        if (args[0] == "0") {
+            Output output = new Output(input.getNuc(), input.getBass());
+            try {
+                output.play();
+            }
+            catch (InterruptedException e) {
+                System.err.println("Caught InterruptedException: " + e.getMessage());
+                System.exit(0);
+            }
         }
-        catch (InterruptedException e) {
-            System.err.println("Caught InterruptedException: " + e.getMessage());
-            System.exit(0);
+        else {
+            Tracker tracker = new Tracker(input.getNuc(), input.getBass());
+            try {
+                tracker.run();
+            }
+            catch (InterruptedException e) {
+                System.err.println("Caught InterruptedException: " + e.getMessage());
+                System.exit(0);
+            }
         }
         //Generator gen = new Generator();
     } // Main

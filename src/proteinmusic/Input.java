@@ -11,12 +11,11 @@ public class Input {
     private ArrayList<AminoAcid> bass;
     private BufferedReader reader;
     private int ch;
-    private char[] nucs;
     private Mapping mapping;
+    private Codon newCodon;
 
     public Input(String fileName) {
         mapping = new Mapping();
-        nucs = new char[3];
         file = fileName;
         nuc = new ArrayList();
         bass = new ArrayList<AminoAcid>();
@@ -30,19 +29,20 @@ public class Input {
         try {
             int i = 0;
             while ((ch = reader.read()) != -1) {
-                char c = (char) ch;
-                nuc.add(c);
-                
-                nucs[i-1] = c;
+                if (ch=='A' || ch=='C' || ch=='G' || ch=='T') {
+                    char c = (char)ch;
+                    nuc.add(c);
 
-                if (i >= 2) {
-                    int s = nuc.size();
-                    bass.add(new AminoAcid((Character)nucs[0],
-                            (Character)nucs[1], (Character)nucs[2], mapping));
-                    i = 0;
-                } else {
-                    i++;
-                } // if else
+                    if (i >= 2) {
+                        int s = nuc.size();
+                        newCodon = new Codon(nuc.get(s-1), nuc.get(s-2),
+                                                nuc.get(s-3));
+                        bass.add(new AminoAcid(newCodon, mapping));
+                        i = 0;
+                    } else {
+                        i++;
+                    } // if else
+                } // if
             } // while
         } catch (IOException e) {
             System.err.println("Caught IOException: " + e.getMessage());

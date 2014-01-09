@@ -13,11 +13,14 @@ package proteinmusic;
 public class Codon implements Comparable {
     
     private char n1, n2, n3;
+    private int index;
     
     public Codon(char nuc1, char nuc2, char nuc3) {
         n1 = nuc1;
         n2 = nuc2;
         n3 = nuc3;
+        
+        index = ((c2I(nuc1)*16)+(c2I(nuc2)*4)+c2I(nuc3));
     }
     
     public char getN1() {
@@ -30,6 +33,10 @@ public class Codon implements Comparable {
     
     public char getN3() {
         return n3;
+    }
+    
+    public int getIndex() {
+        return index;
     }
     
     @Override
@@ -66,4 +73,22 @@ public class Codon implements Comparable {
             return false;
         }
     }
+    
+    private int c2I(char c) {
+        int x = 0;
+        switch (c) {
+            case 'A': x = 0;
+                      break;
+            case 'C': x = 1;
+                      break;
+            case 'G': x = 2;
+                      break;
+            case 'T': x = 3;
+                      break;
+            default: x = 0;
+                     System.out.println("Couldn't convert char "+c+" to index");
+                     break;
+        }
+        return x;
+    } // Method - charToIndex
 }
