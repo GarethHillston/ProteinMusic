@@ -54,8 +54,8 @@ public class Mapping {
             "Phenylalanine"};
     } // Mapping
     
-    public int getIndex(Codon c) {
-        return map[nucSeqs.indexOf(c)];
+    public int getAAIndex(Codon c) {
+        return map[c.getIndex()];
     } // getIndex
     
     public String getName(int index) {

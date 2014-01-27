@@ -32,7 +32,6 @@ public class Tracker {
     
     private char c;
     private int codonTracker;
-    private char[] codonNucs;
     private Codon currentCodon;
     private AminoAcid currentAA;
 
@@ -48,8 +47,8 @@ public class Tracker {
         polRunNo = new int[7];  aaRunNo = new int[7];  forRunNo = new int[7];
         backRunNo = new int[7];
         
-        aaTotal = new int[22];  classTotal = new int[7];
-        polTotal = new int[4];  codonTotal = new int[64];
+        aaTotal = new int[23];  classTotal = new int[7];
+        polTotal = new int[5];  codonTotal = new int[64];
         
         nucRun = new ArrayList();
         classRun = new ArrayList();
@@ -59,7 +58,7 @@ public class Tracker {
         forRun = new ArrayList();         
         backRun = new ArrayList();
         
-        codonTracker = 0;  codonNucs = new char[3];
+        codonTracker = 0;
     } // Method - Tracker
 
     public void run() throws InterruptedException {
@@ -75,41 +74,44 @@ public class Tracker {
             // reverse nuc
             checkForBackwardRun(c, backRun, backRunNo);
             
-            
-            codonNucs[codonTracker] = c;
-            
             // -- Codon data --
             if (codonTracker >= 2) {
                 // Codon data
                 //currentCodon = new Codon(codonNucs[0], codonNucs[1],
                 //                           codonNucs[2]);
-                currentCodon = ((AminoAcid)iterBass.next()).getCodon();
+                if (iterBass.hasNext()) {
+                    currentCodon = ((AminoAcid)iterBass.next()).getCodon();
                 
-                // CodonTotal
-                codonTotal[currentCodon.getIndex()] ++;
+                    // CodonTotal
+                    codonTotal[currentCodon.getIndex()] ++;
                 
-                checkForRepeatRun(currentCodon, nucRun, nucRunNo);
+                    checkForRepeatRun(currentCodon, codonRun, codonRunNo);
             
-                // == Amino Acid data ==
-                currentAA = (AminoAcid)iterBass.next();
+                    // == Amino Acid data ==
+                    currentAA = (AminoAcid)iterBass.next();
                     
-                // Amino acid type, class and polarity totals
-                aaTotal[currentAA.getIndex()] ++;
-                classTotal[currentAA.getAAClass()] ++;
-                polTotal[currentAA.getPolarity()] ++;
+                    // Amino acid type, class and polarity totals
+                    aaTotal[currentAA.getIndex()] ++;
+                    classTotal[currentAA.getAAClass()] ++;
+                    polTotal[currentAA.getPolarity()] ++;
                 
                 
-                // Amino Acid run
-                checkForRepeatRun(currentAA, nucRun, nucRunNo);
+                    // Amino Acid run
+                    checkForRepeatRun(currentAA, aaRun, aaRunNo);
                 
-                // Class run
-                checkForRepeatRun(currentAA.getAAClass(), nucRun, nucRunNo);
+                    // Class run
+                    checkForRepeatRun(currentAA.getAAClass(), classRun, classRunNo);
                 
-                // Polarity run
-                checkForRepeatRun(currentAA.getPolarity(), nucRun, nucRunNo);
+                    // Polarity run
+                    checkForRepeatRun(currentAA.getPolarity(), polRun, polRunNo);
                 
-                codonTracker = 0;
-            }  
+                    codonTracker = 0;
+                    
+                    //System.out.println(currentCodon.getN1()+""+currentCodon.getN2()+""+currentCodon.getN3());
+                    //System.out.println(currentAA.getName());
+                    //System.out.println(currentAA.getAAClass());
+                } // if
+            } // if
             
             codonTracker ++;
         } // while
@@ -200,27 +202,112 @@ public class Tracker {
     } // Method - charToIndex
     
     public void printResults() {
+        //  -- Totals --
+        System.out.println("  == Totals for individual elements ==");
+        System.out.println();
+
         // Codon totals
+        System.out.println("  --  Total numbers of each codon composition --");
         System.out.println("| - | -AA | -AC | -AG | -AT | -CA | -CC | -CG | -CT | -GA | -GC | -GG | -GT | -TA | -TC | -TG | -TT |");
         System.out.print("| A |");
         for (int i = 0; i < 16; i ++) {
-            System.out.print(String.format(" %+3d |", codonTotal[i])); }
+            System.out.print(String.format(" %3d |", codonTotal[i])); }
         System.out.println();
         System.out.print("| C |");
         for (int i = 16; i < 32; i ++) {
-            System.out.print(String.format(" %+3d |", codonTotal[i])); }
+            System.out.print(String.format(" %3d |", codonTotal[i])); }
         System.out.println();
         System.out.print("| G |");
         for (int i = 32; i < 48; i ++) {
-            System.out.print(String.format(" %+3d |", codonTotal[i])); }
+            System.out.print(String.format(" %3d |", codonTotal[i])); }
         System.out.println();
         System.out.print("| T |");
         for (int i = 48; i < 64; i ++) {
-            System.out.print(String.format(" %+3d |", codonTotal[i])); }
+            System.out.print(String.format(" %3d |", codonTotal[i])); }
+        System.out.println();
         System.out.println();
         
-        // Reapeats/Runs
+        // Amino Acid Totals
+        System.out.println("  --  Total numbers of each amino acid --");
+        System.out.print("| Lys | Asp | Thr | Arg | Ser | Iso | Met | Glu |\n|");
+        for (int i = 0; i < 8; i ++) {
+            System.out.print(String.format(" %3d |", aaTotal[i])); }
+        System.out.println();
+        System.out.print("| His | Pro | Leu |G'ate|A'ate| Ala | Gly | Val |\n|");
+        for (int i = 8; i < 16; i ++) {
+            System.out.print(String.format(" %3d |", aaTotal[i])); }
+        System.out.println();
+
+        System.out.print("| och | Tyr | amb | opa | Cys | Try | Phe |\n|");
+        for (int i = 16; i < 23; i ++) {
+            System.out.print(String.format(" %3d |", aaTotal[i])); }
+        System.out.println();
+        System.out.println();
+        
+        // Class Totals
+        System.out.println("  --  Total numbers of each Class --");
+        System.out.println("| Aliphatic | Hydroxyl | Cyclic | Aromatic | Basic | Acidic | stop codon |");
+        System.out.print(String.format("| %9d |", classTotal[0]));
+        System.out.print(String.format(" %8d |", classTotal[1]));
+        System.out.print(String.format(" %6d |", classTotal[2]));
+        System.out.print(String.format(" %9d |", classTotal[3]));
+        System.out.print(String.format(" %5d |", classTotal[4]));
+        System.out.print(String.format(" %6d |", + classTotal[5]));
+        System.out.println(String.format(" %10d |", + classTotal[6]));
+        System.out.println();
+        System.out.println();
+        
+        // Polarity Totals
+        System.out.println("  --  Total numbers of each Polarity --");
+        System.out.println("| Non-polar | Polar | Basic | Acidic | stop codon |");
+        System.out.print(String.format("| %9d |", polTotal[0]));
+        System.out.print(String.format(" %5d |", polTotal[1]));
+        System.out.print(String.format(" %5d |", polTotal[2]));
+        System.out.print(String.format(" %6d |", polTotal[3]));
+        System.out.println(String.format(" %10d |", polTotal[4]));
+        System.out.println();
+        System.out.println();
+        
+        // -- Repeats/Runs --
+        System.out.println("  == Runs of elements ==");
+        System.out.println();
+        
+        // Nucleotide repeat run
+        System.out.println(" -- Runs of repeat nucelotides --");
+        runsPrint(nucRunNo);
+        
+        // Nucleotide forward run
+        System.out.println(" -- Runs of increasing value nucelotides --");
+        runsPrint(forRunNo);
+        
+        // Nucleotide reverse run
+        System.out.println(" -- Runs of reversing value nucelotides --");
+        runsPrint(backRunNo);
+        
+        // Codon run
+        System.out.println(" -- Runs of repeat codons --");
+        runsPrint(codonRunNo);
+        
+        // Amino acid run
+        System.out.println(" -- Runs of repeat amino acids --");
+        runsPrint(aaRunNo);
+        
+        // Class run
+        System.out.println(" -- Runs of repeat classes --");
+        runsPrint(classRunNo);
+        
+        // Polarity run
+        System.out.println(" -- Runs of repeat polarities --");
+        runsPrint(polRunNo);
         
     } // Method - printResults
+    
+    private void runsPrint(int[] array) {
+        System.out.print("|   2 |   3 |   4 |   5 |   6 |  7+ |\n|");
+        for (int i = 1; i < 7; i ++) {
+            System.out.print(String.format(" %3d |", array[i])); }
+        System.out.println();
+        System.out.println();
+    }
     
 } // Class - Tracker

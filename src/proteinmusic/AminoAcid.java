@@ -19,7 +19,7 @@ public class AminoAcid {
     public AminoAcid(Codon codonIn, Mapping m){
         
         codon = codonIn;
-        index = m.getIndex(codon);
+        index = m.getAAIndex(codon);
         name = m.getName(index);
         polarity = m.getPolarity(index);
         aaClass = m.getAAClass(index);

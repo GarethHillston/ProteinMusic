@@ -35,8 +35,9 @@ public class Input {
 
                     if (i >= 2) {
                         int s = nuc.size();
-                        newCodon = new Codon(nuc.get(s-1), nuc.get(s-2),
-                                                nuc.get(s-3));
+                        newCodon = new Codon(nuc.get(s-3), nuc.get(s-2),
+                                                nuc.get(s-1));
+                        System.out.println(nuc.get(s-3)+""+nuc.get(s-2)+""+nuc.get(s-1));
                         bass.add(new AminoAcid(newCodon, mapping));
                         i = 0;
                     } else {
