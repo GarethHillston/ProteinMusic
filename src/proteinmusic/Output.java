@@ -16,12 +16,12 @@ public class Output {
     private MidiChannel[] mc = null;
     private Synthesizer synth;
     private Instrument[] instr;
-    private ArrayList<Character> nuc;
-    private ArrayList<AminoAcid> bass;
-    private Iterator iterNuc, iterBass;
+    private ArrayList<Integer> notes;
+    private ArrayList<Chord> chords;
+    private Iterator iterNote, iterChord;
     private long noteStart, bassStart;
 
-    public Output(ArrayList nucIn, ArrayList<AminoAcid> bassIn) {
+    public Output(ArrayList<Integer> notesIn, ArrayList<Chord> ChordsIn) {
         try {
             synth = MidiSystem.getSynthesizer();
             synth.open();
@@ -34,68 +34,26 @@ public class Output {
             System.exit(0);
         } // catch
 
-        nuc = nucIn;
-        bass = bassIn;
+        notes = notesIn;
+        chords = ChordsIn;
 
-        iterNuc = nuc.iterator();
-        iterBass = bass.iterator();
+        iterNote = notes.iterator();
+        iterChord = chords.iterator();
     } // Method - Output
 
     public void play() throws InterruptedException {
-        while (iterNuc.hasNext()) {
+        while (iterNote.hasNext()) {
             if (System.currentTimeMillis() >= noteStart + 300) {
-                switch (((Character) iterNuc.next())) {
-                    case 'A':
-                        mc[5].noteOn(60, 600);
-                        noteStart = System.currentTimeMillis();
-                        break;
-                    case 'C':
-                        mc[5].noteOn(63, 600);
-                        noteStart = System.currentTimeMillis();
-                        break;
-                    case 'T':
-                        mc[5].noteOn(65, 600);
-                        noteStart = System.currentTimeMillis();
-                        break;
-                    case 'G':
-                        mc[5].noteOn(67, 600);
-                        noteStart = System.currentTimeMillis();
-                        break;
-                } // switch
+                mc[5].noteOn((int)iterNote.next(), 600);
+                noteStart = System.currentTimeMillis();
             } // if
 
             if (System.currentTimeMillis() >= bassStart + 900) {
                 mc[5].allNotesOff();
-                switch (((AminoAcid) iterBass.next()).getAAClass()) {
-                    case 0:
-                        mc[5].noteOn(60, 600);
-                        bassStart = System.currentTimeMillis();
-                        break;
-                    case 1:
-                        mc[5].noteOn(63, 600);
-                        bassStart = System.currentTimeMillis();
-                        break;
-                    case 2:
-                        mc[5].noteOn(65, 600);
-                        bassStart = System.currentTimeMillis();
-                        break;
-                    case 3:
-                        mc[5].noteOn(66, 600);
-                        bassStart = System.currentTimeMillis();
-                        break;
-                    case 4:
-                        mc[5].noteOn(67, 600);
-                        bassStart = System.currentTimeMillis();
-                        break;
-                    case 5:
-                        mc[5].noteOn(69, 600);
-                        bassStart = System.currentTimeMillis();
-                        break;
-                    case 6:
-                        mc[5].noteOn(60, 600);
-                        bassStart = System.currentTimeMillis();
-                        break;
-                } // switch
+                mc[5].noteOn(((Chord)iterChord.next()).getN1(), 600);
+                mc[5].noteOn(((Chord)iterChord.next()).getN2(), 600);
+                mc[5].noteOn(((Chord)iterChord.next()).getN3(), 600);
+                bassStart = System.currentTimeMillis();
             } // if
         } // while
     } // Method - play

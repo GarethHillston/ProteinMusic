@@ -16,8 +16,10 @@ public class ProteinMusic {
     public static void main(String[] args) {
         // Create modules
         Input input = new Input(args[1]);
-        if (args[0] == "0") {
-            Output output = new Output(input.getNuc(), input.getBass());
+        Translator translator = new BasicTranslator();
+        translator.translate(input.getNuc(), input.getBass());
+        if (Integer.parseInt(args[0]) == 0) {
+            Output output = new Output(translator.getNotes(), translator.getChords());
             try {
                 output.play();
             }
