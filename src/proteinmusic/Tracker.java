@@ -129,6 +129,7 @@ public class Tracker {
         totalAARuns = calculateTotal(aaRunNo);
         totalForRuns = calculateTotal(forRunNo);
         totalBackRuns = calculateTotal(backRunNo);
+        totalNucRuns = calculateTotal(nucRunNo);
 
         printResults();
         
@@ -217,6 +218,7 @@ public class Tracker {
     } // Method - charToIndex
     
     public double calculateTotal(int[] array) {
+        total = 0;
         for (int i = 1; i < array.length; i ++) {
             total +=array[i];
         }
@@ -233,19 +235,19 @@ public class Tracker {
         System.out.println("| - |  -AA  |  -AC  |  -AG  |  -AT  |  -CA  |  -CC  |  -CG  |  -CT  |  -GA  |  -GC  |  -GG  |  -GT  |  -TA  |  -TC  |  -TG  |  -TT  |");
         System.out.print("| A |");
         for (int i = 0; i < 16; i ++) {
-            System.out.print(String.format(" %3.3f |", codonTotal[i]/totalAAs)); }
+            System.out.print(String.format(" %5.1f |", codonTotal[i]/totalAAs*100)); }
         System.out.println();
         System.out.print("| C |");
         for (int i = 16; i < 32; i ++) {
-            System.out.print(String.format(" %3.3f |", codonTotal[i]/totalAAs)); }
+            System.out.print(String.format(" %5.1f |", codonTotal[i]/totalAAs*100)); }
         System.out.println();
         System.out.print("| G |");
         for (int i = 32; i < 48; i ++) {
-            System.out.print(String.format(" %3.3f |", codonTotal[i]/totalAAs)); }
+            System.out.print(String.format(" %5.1f |", codonTotal[i]/totalAAs*100)); }
         System.out.println();
         System.out.print("| T |");
         for (int i = 48; i < 64; i ++) {
-            System.out.print(String.format(" %3.3f |", codonTotal[i]/totalAAs)); }
+            System.out.print(String.format(" %5.1f |", codonTotal[i]/totalAAs*100)); }
         System.out.println();
         System.out.println();
         
@@ -253,40 +255,40 @@ public class Tracker {
         System.out.println("  --  Percentages for each amino acid --");
         System.out.print("|  Lys  |  Asp  |  Thr  |  Arg  |  Ser  |  Iso  |  Met  |  Glu  |\n|");
         for (int i = 0; i < 8; i ++) {
-            System.out.print(String.format(" %3.3f |", aaTotal[i]/totalAAs)); }
+            System.out.print(String.format(" %5.1f |", aaTotal[i]/totalAAs*100)); }
         System.out.println();
         System.out.print("|  His  |  Pro  |  Leu  | G'ate | A'ate |  Ala  |  Gly  |  Val  |\n|");
         for (int i = 8; i < 16; i ++) {
-            System.out.print(String.format(" %3.3f |", aaTotal[i]/totalAAs)); }
+            System.out.print(String.format(" %5.1f |", aaTotal[i]/totalAAs*100)); }
         System.out.println();
 
         System.out.print("|  och  |  Tyr  |  amb  |  opa  |  Cys  |  Try  |  Phe  |\n|");
         for (int i = 16; i < 23; i ++) {
-            System.out.print(String.format(" %3.3f |", aaTotal[i]/totalAAs)); }
+            System.out.print(String.format(" %5.1f |", aaTotal[i]/totalAAs*100)); }
         System.out.println();
         System.out.println();
         
         // Class Totals
         System.out.println("  --  Percentages for each Class --");
         System.out.println("| Aliphatic |  Hydroxyl |  Cyclic  | Aromatic |  Basic  |  Acidic  | stop codon |");
-        System.out.print(String.format("|   %3.3f   |", classTotal[0]/totalAAs));
-        System.out.print(String.format("   %3.3f   |", classTotal[1]/totalAAs));
-        System.out.print(String.format("   %3.3f  |", classTotal[2]/totalAAs));
-        System.out.print(String.format("   %3.3f  |", classTotal[3]/totalAAs));
-        System.out.print(String.format("  %3.3f  |", classTotal[4]/totalAAs));
-        System.out.print(String.format("   %3.3f  |", + classTotal[5]/totalAAs));
-        System.out.println(String.format("   %3.3f    |", + classTotal[6]/totalAAs));
+        System.out.print(String.format("|   %5.1f   |", classTotal[0]/totalAAs*100));
+        System.out.print(String.format("   %5.1f   |", classTotal[1]/totalAAs*100));
+        System.out.print(String.format("   %5.1f  |", classTotal[2]/totalAAs*100));
+        System.out.print(String.format("   %5.1f  |", classTotal[3]/totalAAs*100));
+        System.out.print(String.format("  %5.1f  |", classTotal[4]/totalAAs*100));
+        System.out.print(String.format("   %5.1f  |", + classTotal[5]/totalAAs*100));
+        System.out.println(String.format("   %5.1f    |", + classTotal[6]/totalAAs*100));
         System.out.println();
         System.out.println();
         
         // Polarity Totals
         System.out.println("  --  Percentages for each Polarity --");
         System.out.println("| Non-polar |  Polar  |  Basic  |  Acidic  | stop codon |");
-        System.out.print(String.format("|   %3.3f   |", polTotal[0]/totalAAs));
-        System.out.print(String.format("  %3.3f  |", polTotal[1]/totalAAs));
-        System.out.print(String.format("  %3.3f  |", polTotal[2]/totalAAs));
-        System.out.print(String.format("   %3.3f  |", polTotal[3]/totalAAs));
-        System.out.println(String.format("   %3.3f    |", polTotal[4]/totalAAs));
+        System.out.print(String.format("|   %5.1f   |", polTotal[0]/totalAAs*100));
+        System.out.print(String.format("  %5.1f  |", polTotal[1]/totalAAs*100));
+        System.out.print(String.format("  %5.1f  |", polTotal[2]/totalAAs*100));
+        System.out.print(String.format("   %5.1f  |", polTotal[3]/totalAAs*100));
+        System.out.println(String.format("   %5.1f    |", polTotal[4]/totalAAs*100));
         System.out.println();
         System.out.println();
         
@@ -436,9 +438,9 @@ public class Tracker {
     } // Method - printResults
     
     private void runsPrint(int[] array, double arrayTotal) {
-        System.out.print("|    2    |    3    |    4    |    5    |    6    |    7+   |\n|");
+        System.out.print("|   2   |   3   |   4   |   5   |   6   |   7+  |\n|");
         for (int i = 1; i < 7; i ++) {
-            System.out.print(String.format(" %3.5f |", array[i]/arrayTotal)); }
+            System.out.print(String.format(" %5.1f |", array[i]/arrayTotal*100)); }
         System.out.println();
         System.out.println();
         

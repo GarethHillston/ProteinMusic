@@ -45,4 +45,11 @@ public class AminoAcid {
     public Codon getCodon() {
         return codon;
     } // Method - getNuc
+    
+    public boolean equals(Object o) {
+        if (((AminoAcid)o).getIndex() == this.index)
+            { return true; }
+        else
+            {return false; }
+    }
 } // Class - AminoAcid
