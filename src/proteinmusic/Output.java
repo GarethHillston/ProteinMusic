@@ -27,7 +27,7 @@ public class Output {
             synth.open();
             mc = synth.getChannels();
             instr = synth.getDefaultSoundbank().getInstruments();
-            synth.loadInstrument(instr[90]);
+            mc[5].programChange(0, 11);
         } // try
         catch (Exception e) {
             System.err.println("Output constructor failed, exception: " + e.getMessage());
@@ -36,25 +36,46 @@ public class Output {
 
         notes = notesIn;
         chords = ChordsIn;
-
         iterNote = notes.iterator();
         iterChord = chords.iterator();
+        
+        noteStart = System.currentTimeMillis() - 300;
     } // Method - Output
 
     public void play() throws InterruptedException {
-        while (iterNote.hasNext()) {
-            if (System.currentTimeMillis() >= noteStart + 300) {
-                mc[5].noteOn((int)iterNote.next(), 600);
-                noteStart = System.currentTimeMillis();
-            } // if
-
-            if (System.currentTimeMillis() >= bassStart + 900) {
+        Chord tempChord;
+        int notes = 0;
+        int thisNote;
+        
+        while (iterChord.hasNext()) {
+            
+            if (System.currentTimeMillis() >= bassStart + 1200) {
                 mc[5].allNotesOff();
-                mc[5].noteOn(((Chord)iterChord.next()).getN1(), 600);
-                mc[5].noteOn(((Chord)iterChord.next()).getN2(), 600);
-                mc[5].noteOn(((Chord)iterChord.next()).getN3(), 600);
+                tempChord = (Chord)iterChord.next();
+                mc[5].noteOn(tempChord.get1st(), 85);
+                mc[5].noteOn(tempChord.get2nd(), 85);
+                mc[5].noteOn(tempChord.get3rd(), 85);
                 bassStart = System.currentTimeMillis();
             } // if
+            
+            if (iterNote.hasNext()) {
+                while (notes < 4) {
+                    if (System.currentTimeMillis() >= noteStart + 300) {
+                        thisNote = (int)iterNote.next();
+                        if (thisNote != -1) {
+                            mc[5].noteOn(thisNote, 600);
+                        }
+                        noteStart = System.currentTimeMillis();
+                        notes ++;
+                    } // if 
+                } // while
+            } // if
+            
+            notes = 0;
+            
         } // while
+        
+        Thread.sleep(5000);
+        
     } // Method - play
 } // Class - Output

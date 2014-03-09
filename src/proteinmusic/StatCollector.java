@@ -10,15 +10,18 @@ import java.util.*;
  *
  * @author Gareth
  */
-public class Tracker {
+public class StatCollector {
     
     private ArrayList<Character> nuc;
     private ArrayList<AminoAcid> bass;
     private Iterator iterNuc, iterBass;
-    private Mapping mapping;
     
     private int[] nucRunNo, classRunNo, polRunNo, aaRunNo, codonRunNo;
     private int[] forRunNo, backRunNo;
+    private double[] percentageAAs, percentageCodons, percentageClasses,
+            percentagePolarities, percentageNucRuns, percentageClassRuns,
+            percentageCodonRuns, percentagePolarityRuns, percentageAARuns,
+            percentageForRuns, percentageBackRuns;
     private int[] aaTotal, classTotal, polTotal, codonTotal;
     
     private ArrayList<Character> nucRun;
@@ -37,13 +40,7 @@ public class Tracker {
     private Codon currentCodon;
     private AminoAcid currentAA;
 
-    public Tracker(ArrayList nucIn, ArrayList bassIn) {
-
-        nuc = nucIn;
-        bass = bassIn;
-        iterNuc = nuc.iterator();
-        iterBass = bass.iterator();
-        mapping = new Mapping();
+    public StatCollector() {
 
         nucRunNo = new int[7]; classRunNo = new int[7]; codonRunNo = new int[7];
         polRunNo = new int[7];  aaRunNo = new int[7];  forRunNo = new int[7];
@@ -62,12 +59,25 @@ public class Tracker {
         
         totalAAs = 0; totalNucRuns = 0; totalClassRuns = 0;
         totalCodonRuns = 0; totalPolarityRuns = 0; totalAARuns = 0;
-        totalForRuns = 0; totalBackRuns = 0;       
+        totalForRuns = 0; totalBackRuns = 0;    
+        
+        percentageAAs = new double[23]; percentageCodons = new double[64];
+        percentageClasses = new double[7]; percentagePolarities = new double[5];
+        percentageNucRuns = new double[7]; percentageClassRuns = new double[7];
+        percentageCodonRuns = new double[7]; percentagePolarityRuns = new double[7];
+        percentageAARuns = new double[7]; percentageForRuns = new double[7];
+        percentageBackRuns = new double[7];
         
         codonTracker = 0;
-    } // Method - Tracker
+    } // Method - StatCollector
 
-    public void run() throws InterruptedException {
+    public void run(ArrayList nucIn, ArrayList bassIn) throws InterruptedException {
+        
+        nuc = nucIn;
+        bass = bassIn;
+        iterNuc = nuc.iterator();
+        iterBass = bass.iterator();
+        
         while (iterNuc.hasNext()) {
             c = (char)iterNuc.next();
             
@@ -130,8 +140,40 @@ public class Tracker {
         totalForRuns = calculateTotal(forRunNo);
         totalBackRuns = calculateTotal(backRunNo);
         totalNucRuns = calculateTotal(nucRunNo);
-
-        printResults();
+        
+        for(int i = 0; i < 23; i++) {
+            percentageAAs[i] = aaTotal[i]/totalAAs*100;
+        }
+        for(int i = 0; i < 64; i++) {
+            percentageCodons[i] = codonTotal[i]/totalAAs*100;
+        }
+        for(int i = 0; i < 7; i++) {
+            percentageClasses[i] = classTotal[i]/totalAAs*100;
+        }
+        for(int i = 0; i < 5; i++) {
+            percentagePolarities[i] = polTotal[i]/totalAAs*100;
+        }
+        for(int i = 0; i < 7; i++) {
+            percentageNucRuns[i] = nucRunNo[i]/totalNucRuns*100;
+        }
+        for(int i = 0; i < 7; i++) {
+            percentageClassRuns[i] = classRunNo[i]/totalClassRuns*100;
+        }
+        for(int i = 0; i < 7; i++) {
+            percentageCodonRuns[i] = codonRunNo[i]/totalCodonRuns*100;
+        }
+        for(int i = 0; i < 7; i++) {
+            percentagePolarityRuns[i] = polRunNo[i]/totalPolarityRuns*100;
+        }
+        for(int i = 0; i < 7; i++) {
+            percentageAARuns[i] = aaRunNo[i]/totalAARuns*100;
+        }
+        for(int i = 0; i < 7; i++) {
+            percentageForRuns[i] = forRunNo[i]/totalForRuns*100;
+        }
+        for(int i = 0; i < 7; i++) {
+            percentageBackRuns[i] = backRunNo[i]/totalBackRuns*100;
+        }
         
     } // Method - run
     
@@ -225,70 +267,70 @@ public class Tracker {
         return total;
     } // Method - calculateTotal
     
-    public void printResults() {
-        //  -- Totals --
+    public void printPercentages() {
+        //  -- Percentages --
         System.out.println("  == Percentages for individual elements ==");
         System.out.println();
 
-        // Codon totals
+        // Codon percentages
         System.out.println("  --  Percentages for each codon composition --");
         System.out.println("| - |  -AA  |  -AC  |  -AG  |  -AT  |  -CA  |  -CC  |  -CG  |  -CT  |  -GA  |  -GC  |  -GG  |  -GT  |  -TA  |  -TC  |  -TG  |  -TT  |");
         System.out.print("| A |");
         for (int i = 0; i < 16; i ++) {
-            System.out.print(String.format(" %5.1f |", codonTotal[i]/totalAAs*100)); }
+            System.out.print(String.format(" %5.1f |", percentageCodons[i])); }
         System.out.println();
         System.out.print("| C |");
         for (int i = 16; i < 32; i ++) {
-            System.out.print(String.format(" %5.1f |", codonTotal[i]/totalAAs*100)); }
+            System.out.print(String.format(" %5.1f |", percentageCodons[i])); }
         System.out.println();
         System.out.print("| G |");
         for (int i = 32; i < 48; i ++) {
-            System.out.print(String.format(" %5.1f |", codonTotal[i]/totalAAs*100)); }
+            System.out.print(String.format(" %5.1f |", percentageCodons[i])); }
         System.out.println();
         System.out.print("| T |");
         for (int i = 48; i < 64; i ++) {
-            System.out.print(String.format(" %5.1f |", codonTotal[i]/totalAAs*100)); }
+            System.out.print(String.format(" %5.1f |", percentageCodons[i])); }
         System.out.println();
         System.out.println();
         
-        // Amino Acid Totals
+        // Amino Acid Percentages
         System.out.println("  --  Percentages for each amino acid --");
         System.out.print("|  Lys  |  Asp  |  Thr  |  Arg  |  Ser  |  Iso  |  Met  |  Glu  |\n|");
         for (int i = 0; i < 8; i ++) {
-            System.out.print(String.format(" %5.1f |", aaTotal[i]/totalAAs*100)); }
+            System.out.print(String.format(" %5.1f |", percentageAAs[i])); }
         System.out.println();
         System.out.print("|  His  |  Pro  |  Leu  | G'ate | A'ate |  Ala  |  Gly  |  Val  |\n|");
         for (int i = 8; i < 16; i ++) {
-            System.out.print(String.format(" %5.1f |", aaTotal[i]/totalAAs*100)); }
+            System.out.print(String.format(" %5.1f |", percentageAAs[i])); }
         System.out.println();
 
         System.out.print("|  och  |  Tyr  |  amb  |  opa  |  Cys  |  Try  |  Phe  |\n|");
         for (int i = 16; i < 23; i ++) {
-            System.out.print(String.format(" %5.1f |", aaTotal[i]/totalAAs*100)); }
+            System.out.print(String.format(" %5.1f |", percentageAAs[i])); }
         System.out.println();
         System.out.println();
         
-        // Class Totals
+        // Class Percentages
         System.out.println("  --  Percentages for each Class --");
         System.out.println("| Aliphatic |  Hydroxyl |  Cyclic  | Aromatic |  Basic  |  Acidic  | stop codon |");
-        System.out.print(String.format("|   %5.1f   |", classTotal[0]/totalAAs*100));
-        System.out.print(String.format("   %5.1f   |", classTotal[1]/totalAAs*100));
-        System.out.print(String.format("   %5.1f  |", classTotal[2]/totalAAs*100));
-        System.out.print(String.format("   %5.1f  |", classTotal[3]/totalAAs*100));
-        System.out.print(String.format("  %5.1f  |", classTotal[4]/totalAAs*100));
-        System.out.print(String.format("   %5.1f  |", + classTotal[5]/totalAAs*100));
-        System.out.println(String.format("   %5.1f    |", + classTotal[6]/totalAAs*100));
+        System.out.print(String.format("|   %5.1f   |", percentageClasses[0]));
+        System.out.print(String.format("   %5.1f   |", percentageClasses[1]));
+        System.out.print(String.format("   %5.1f  |", percentageClasses[2]));
+        System.out.print(String.format("   %5.1f  |", percentageClasses[3]));
+        System.out.print(String.format("  %5.1f  |", percentageClasses[4]));
+        System.out.print(String.format("   %5.1f  |", + percentageClasses[5]));
+        System.out.println(String.format("   %5.1f    |", + percentageClasses[6]));
         System.out.println();
         System.out.println();
         
-        // Polarity Totals
+        // Polarity Percentages
         System.out.println("  --  Percentages for each Polarity --");
         System.out.println("| Non-polar |  Polar  |  Basic  |  Acidic  | stop codon |");
-        System.out.print(String.format("|   %5.1f   |", polTotal[0]/totalAAs*100));
-        System.out.print(String.format("  %5.1f  |", polTotal[1]/totalAAs*100));
-        System.out.print(String.format("  %5.1f  |", polTotal[2]/totalAAs*100));
-        System.out.print(String.format("   %5.1f  |", polTotal[3]/totalAAs*100));
-        System.out.println(String.format("   %5.1f    |", polTotal[4]/totalAAs*100));
+        System.out.print(String.format("|   %5.1f   |", percentagePolarities[0]));
+        System.out.print(String.format("  %5.1f  |", percentagePolarities[1]));
+        System.out.print(String.format("  %5.1f  |", percentagePolarities[2]));
+        System.out.print(String.format("   %5.1f  |", percentagePolarities[3]));
+        System.out.println(String.format("   %5.1f    |", percentagePolarities[4]));
         System.out.println();
         System.out.println();
         
@@ -298,36 +340,39 @@ public class Tracker {
         
         // Nucleotide repeat run
         System.out.println(" -- Percentage runs of repeat nucelotides --");
-        runsPrint(nucRunNo, totalNucRuns);
+        runsPrint(percentageNucRuns);
         
         // Nucleotide forward run
         System.out.println(" -- Percentage runs of increasing value nucelotides --");
-        runsPrint(forRunNo, totalForRuns);
+        runsPrint(percentageForRuns);
         
         // Nucleotide reverse run
         System.out.println(" -- Percentage runs of reversing value nucelotides --");
-        runsPrint(backRunNo, totalBackRuns);
+        runsPrint(percentageBackRuns);
         
         // Codon run
         System.out.println(" -- Percentage runs of repeat codons --");
-        runsPrint(codonRunNo, totalCodonRuns);
+        runsPrint(percentageCodonRuns);
         
         // Amino acid run
         System.out.println(" -- Percentage runs of repeat amino acids --");
-        runsPrint(aaRunNo, totalAARuns);
+        runsPrint(percentageAARuns);
         
         // Class run
         System.out.println(" -- Percentage runs of repeat classes --");
-        runsPrint(classRunNo, totalClassRuns);
+        runsPrint(percentageClassRuns);
         
         // Polarity run
         System.out.println(" -- Percentage runs of repeat polarities --");
-        runsPrint(polRunNo, totalPolarityRuns);
+        runsPrint(percentagePolarityRuns);
         
         System.out.println();
         System.out.println();
         System.out.println();
         
+    } // Method - PrintPercentages
+        
+    public void printTotals() {  
             //  -- Totals --
         System.out.println("  == Totals for individual elements ==");
         System.out.println();
@@ -426,7 +471,7 @@ public class Tracker {
         System.out.println(" -- Runs of repeat polarities --");
         runsPrint(polRunNo);
         
-    } // Method - printResults
+    } // Method - printTotals
     
     private void runsPrint(int[] array) {
         System.out.print("|   2   |   3   |   4   |   5   |   6   |   7+  |\n|");
@@ -435,15 +480,59 @@ public class Tracker {
         System.out.println();
         System.out.println();
         
-    } // Method - printResults
+    } // Method - runsPrint
     
-    private void runsPrint(int[] array, double arrayTotal) {
+    private void runsPrint(double[] array) {
         System.out.print("|   2   |   3   |   4   |   5   |   6   |   7+  |\n|");
         for (int i = 1; i < 7; i ++) {
-            System.out.print(String.format(" %5.1f |", array[i]/arrayTotal*100)); }
+            System.out.print(String.format(" %5.1f |", array[i])); }
         System.out.println();
         System.out.println();
         
-    } // Method - printResults
+    } // Method - runsPrint
+    
+    public double[] getPerAAs() {
+        return percentageAAs;
+    }
+    
+    public double[] getPerCodons() {
+        return percentageCodons;
+    }
+    
+    public double[] getPerClasses() {
+        return percentageClasses;
+    }
+    
+    public double[] getPerPolarities() {
+        return percentagePolarities;
+    }
+    
+    public double[] getPerNucRuns() {
+        return percentageNucRuns;
+    }
+    
+    public double[] getPerForRuns() {
+        return percentageForRuns;
+    }
+    
+    public double[] getPerBackRuns() {
+        return percentageBackRuns;
+    }
+    
+    public double[] getPerCodonRuns() {
+        return percentageCodonRuns;
+    }
+    
+    public double[] getPerAARuns() {
+        return percentageAARuns;
+    }
+    
+    public double[] getPerClassRuns() {
+        return percentageClassRuns;
+    }
+    
+    public double[] getPerPolarityRuns() {
+        return percentagePolarityRuns;
+    }
     
 } // Class - Tracker

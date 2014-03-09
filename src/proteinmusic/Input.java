@@ -14,11 +14,19 @@ public class Input {
     private Mapping mapping;
     private Codon newCodon;
 
-    public Input(String fileName) {
+    public Input() {
         mapping = new Mapping();
-        file = fileName;
         nuc = new ArrayList();
         bass = new ArrayList<AminoAcid>();
+
+    } // Method - Input
+    
+    public void parseInput(String fileName) {
+        
+        file = fileName;
+        nuc.clear();
+        bass.clear();
+        
         try {
             reader = new BufferedReader(new FileReader(file));
         } catch (IOException e) {
@@ -48,16 +56,13 @@ public class Input {
             System.err.println("Caught IOException: " + e.getMessage());
             System.exit(0);
         }
-
-        //Convert AA's
-
-    } // Method - Input
+    }
 
     public ArrayList getNuc() {
-        return nuc;
+        return (ArrayList)nuc.clone();
     } // Method - getNuc
 
     public ArrayList<AminoAcid> getBass() {
-        return bass;
+        return (ArrayList)bass.clone();
     } // Method - getBass
 } // Class - Input

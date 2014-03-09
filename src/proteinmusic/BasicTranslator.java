@@ -14,10 +14,8 @@ import java.util.*;
  */
 public class BasicTranslator extends Translator {
     
-    public BasicTranslator() {
-        super();
-        notes = new ArrayList<Integer>();
-        chords = new ArrayList<Chord>();
+    public BasicTranslator(StatCollector stats) {
+        super(stats);
     }
     
     public void translate(ArrayList nuc, ArrayList bass) {
@@ -55,7 +53,7 @@ public class BasicTranslator extends Translator {
                 default: chords.add(new Chord(60,64,67));
                          break;
             }
-        }  
+        }
     }
     
 }

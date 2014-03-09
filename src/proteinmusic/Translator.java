@@ -16,8 +16,14 @@ public class Translator {
     
     ArrayList<Integer> notes;
     ArrayList<Chord> chords;
+    MusicMapping mapping;
+    ChordSequencer chordSequencer;
+    NoteSequencer noteSequencer;
     
-    public Translator() {
+    public Translator(StatCollector stats) {
+        notes = new ArrayList();
+        chords = new ArrayList();
+        mapping = new MusicMapping(stats);
     }
     
     public void translate(ArrayList nuc, ArrayList bass) {  
