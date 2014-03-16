@@ -28,6 +28,7 @@ public class Output {
             mc = synth.getChannels();
             instr = synth.getDefaultSoundbank().getInstruments();
             mc[5].programChange(0, 11);
+            mc[6].programChange(0, 11);
         } // try
         catch (Exception e) {
             System.err.println("Output constructor failed, exception: " + e.getMessage());
@@ -50,11 +51,11 @@ public class Output {
         while (iterChord.hasNext()) {
             
             if (System.currentTimeMillis() >= bassStart + 1200) {
-                mc[5].allNotesOff();
+                mc[6].allNotesOff();
                 tempChord = (Chord)iterChord.next();
-                mc[5].noteOn(tempChord.get1st(), 85);
-                mc[5].noteOn(tempChord.get2nd(), 85);
-                mc[5].noteOn(tempChord.get3rd(), 85);
+                mc[6].noteOn(tempChord.get1st(), 85);
+                mc[6].noteOn(tempChord.get2nd(), 85);
+                mc[6].noteOn(tempChord.get3rd(), 85);
                 bassStart = System.currentTimeMillis();
             } // if
             
@@ -63,6 +64,7 @@ public class Output {
                     if (System.currentTimeMillis() >= noteStart + 300) {
                         thisNote = (int)iterNote.next();
                         if (thisNote != -1) {
+                            mc[5].allNotesOff();
                             mc[5].noteOn(thisNote, 600);
                         }
                         noteStart = System.currentTimeMillis();

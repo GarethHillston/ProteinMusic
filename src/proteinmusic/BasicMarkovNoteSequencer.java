@@ -19,7 +19,8 @@ public class BasicMarkovNoteSequencer extends NoteSequencer{
     private ArrayList<Integer> notes;
     
     public BasicMarkovNoteSequencer(MusicMapping mappingIn) {
-        super(mappingIn);
+        super();
+        mapping = mappingIn;
         notes = new ArrayList();
     } // Constructor - ArpeggiatingNoteSequencer
     

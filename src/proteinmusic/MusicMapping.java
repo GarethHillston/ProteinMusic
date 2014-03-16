@@ -13,6 +13,7 @@ package proteinmusic;
 public class MusicMapping {
     
     StatCollector stats;
+    private int notesAA[];
     private int[][] scales;
     private int[][][] scaleChords;
     private double[][] probMapping;
@@ -24,6 +25,8 @@ public class MusicMapping {
                             {55,59,62},{57,60,64},{59,62,65}}};
         scales = new int[][] {{48,50,52,53,55,57,59,60,62,64,65,67,69,71,72,74,
                                 76,77,79,81,83}};
+        notesAA = new int[] {-1,45,47,48,50,52,53,55,57,59,60,62,64,65,
+                                67,69,71,72,74,76,77,79,-1};
         probMapping = new double[][] {
             {stats.getPerClasses()[6], stats.getPerAAs()[14]}, // 0.05
             {stats.getPerAAs()[11], stats.getPerAARuns()[1]}, // 0.1
@@ -65,8 +68,16 @@ public class MusicMapping {
         return tempChord;
     }
     
-    public double getProb(int probability) {
-        int index = (probability * 20) - 1;
+    public int[] getChord(int chord, int scaleIndex) {
+        return scaleChords[scaleIndex][chord-1];
+    }
+    
+    public int getNote(AminoAcid acid) {
+        return notesAA[acid.getIndex()];
+    }
+    
+    public double getProb(double probability) {
+        int index = (int)(probability * 20) - 1;
         double choice = Math.random() * 1;
         
         if (choice < 0.5) {

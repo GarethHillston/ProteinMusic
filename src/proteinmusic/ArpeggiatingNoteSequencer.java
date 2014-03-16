@@ -18,10 +18,12 @@ public class ArpeggiatingNoteSequencer extends NoteSequencer{
     private ArrayList<Integer> notes;
     
     public ArpeggiatingNoteSequencer(MusicMapping mappingIn) {
-        super(mappingIn);
+        super();
+        mapping = mappingIn;
     } // Constructor - BasicMarkovNoteSequencer
     
-    public ArrayList<Integer> run(ArrayList<Chord> chords) {
+    public ArrayList<Integer> run(ArrayList<Chord> chords,
+                                    ArrayList<AminoAcid> bass) {
         
         int bar = 0;
         Chord tempChord;

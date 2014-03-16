@@ -13,15 +13,17 @@ import java.util.ArrayList;
  * @author Gareth
  */
 public class NoteSequencer {
-    private MusicMapping mapping;
     ArrayList<Integer> notes;
     
-    public NoteSequencer (MusicMapping mappingIn) {
-        mapping = mappingIn;
+    public NoteSequencer () {
         notes = new ArrayList();
     }
     
     public ArrayList<Integer> run() {
+        return notes;
+    }
+    
+    public ArrayList<Integer> run(ArrayList<AminoAcid> bassIn) {
         return notes;
     }
     

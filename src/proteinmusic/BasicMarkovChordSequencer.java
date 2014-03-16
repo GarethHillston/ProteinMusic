@@ -15,15 +15,22 @@ import java.util.ArrayList;
 public class BasicMarkovChordSequencer extends ChordSequencer{
     
     private MusicMapping mapping;
+    private ArrayList<AminoAcid> bass;
     
     public BasicMarkovChordSequencer(MusicMapping mappingIn) {
         super();
         mapping = mappingIn;
-        //mapping = mappingIn;
     }
     
-    @Override
-    public ArrayList<Chord> run(ArrayList<AminoAcid> bass) {
+    public ArrayList<Chord> run(ArrayList bassIn) {
+        
+        if (!(bassIn.get(0) instanceof AminoAcid)) {
+            System.out.println("That's no amino acid list!");
+            System.exit(0);
+        }
+        
+        bass = bassIn;
+        
         int randomAA;
         int bar = 0;
         

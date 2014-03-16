@@ -21,12 +21,39 @@ public class Translator {
     NoteSequencer noteSequencer;
     
     public Translator(StatCollector stats) {
-        notes = new ArrayList();
-        chords = new ArrayList();
         mapping = new MusicMapping(stats);
     }
     
-    public void translate(ArrayList nuc, ArrayList bass) {  
+    public void translate(ArrayList nuc, ArrayList bass, int chordSeq, int noteSeq) {  
+        
+        // Initialise appropriate chord sequencer
+        switch (chordSeq) {
+            case 0 : chordSequencer = new RandomChordSequencer(mapping);
+                     chords = chordSequencer.run();
+                     break;
+            case 1 : chordSequencer = new DirectClassChordSequencer(mapping);
+                     chords = chordSequencer.run(bass);
+                     break;
+            case 2 : chordSequencer = new BasicMarkovChordSequencer(mapping);
+                     chords = chordSequencer.run(bass);
+                     break;
+            case 3 : chordSequencer = new NoteDerivedChordSequencer(mapping);
+                     break;
+        }
+        
+        // Initialise appropriate note sequencer
+        switch (noteSeq) {
+            case 0 : noteSequencer = new ArpeggiatingNoteSequencer(mapping);
+                     notes = noteSequencer.run(chords, bass);
+                     break;
+            case 1 : noteSequencer = new BasicMarkovNoteSequencer(mapping);
+                     notes = noteSequencer.run(chords, bass);
+                     break;
+            case 2 : noteSequencer = new ExtractionNoteSequencer(mapping);
+                     notes = noteSequencer.run(bass);
+                     chords = chordSequencer.run(notes);
+                     break;
+        }
         
     }
     

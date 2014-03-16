@@ -21,7 +21,11 @@ public class ChordSequencer {
         chordProg = new ArrayList();
     }
     
-    public ArrayList<Chord> run(ArrayList<AminoAcid> bass) {
+    public ArrayList<Chord> run() {
+        return chords;
+    }
+    
+    public ArrayList<Chord> run(ArrayList input) {
         return chords;
     }
     
